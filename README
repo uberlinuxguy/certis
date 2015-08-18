@@ -1,0 +1,88 @@
+This project is based off of the Certis PHP Framework.  Certis is a lazy
+coder's contribution to the PHP community of lazy coders. Actually,
+it's an MVC framework that is highly focused around reusable code and
+ease of use.  It's also modular so that you can add and remove
+functionality to your project very easily and intuitively
+
+I can't take all the credit for this, it's based off of and extrapolated
+from an idea that my friend and fellow coder Edwin (the original Tux Monkey)
+came up with.
+
+Included in the Certis Framework Package, is an example module called
+'hosts.'  To see how this example module works, you will need the
+'hosts.sql' file from the 'data' directory loaded into the database
+that Certis is set up to use.
+
+Also included is a base system wide controller.php file and some simple
+base system wide templates.
+
+The structure of the Certis framework should be pretty self explanitory,
+but here's a brief overview of each subdir from the top level:
+
+/
+	/bin - console level system wide programs.
+	/html - the main html directory, point your aliases here.
+	/system - the main guts of the frame work
+		/config - where the config files go
+		/includes - system wide includes, no module stuff here.
+			init.php - 	the main initializer for Certis, called by index.php
+						in the html directory.
+			/classes - where the system wide classes go
+				API.class.php - 	the main class for utility functions
+									used in the framework
+				Controller.class.php - 	the main class that takes care of
+										common controller functions
+				DB.class.php - 	The main database interface class.
+				DefaultController.class.php - 	A default implementation of
+												the controller class, see
+												this file for more info
+				Model.class.php - 	the main class for db modeling functions
+									this class inherits the DB class for ease
+									of use.
+				View.class.php - 	The main class for view abstraction.
+		/modules - where all the modules that do stuff go.
+			/<module_name> - the name of module all lower case, no spaces
+				/templates - the module level html templates
+				controller.php - the controller for this module
+				<Module_name>.model.php - the db model for this module
+				module.js - (optional) contains module specific js code.
+				module.css - (optional) contains module specific CSS code.
+				init.php - (optional) module specific initialization code.
+
+
+		/templates - system level templates
+		controller.php -	the MainController instance.  Used when you to go
+							http://myhost.com/
+
+
+Here is a general overview of how things progress:
+
+- request comes into index.php
+- index.php loads the config, and runs init.php from the includes/ directory.
+- init.php loads the system classes, all module model classes, then runs all
+  module init.php files.
+- control returns to index.php which runs parseUri() to populate the necessary
+  get variables depending on the 'pretty_urls' setting
+- index.php loads the requested module's controller.php file and instantiates
+  the module's controller which should have a name of ModuleController where
+  Module is the name of the module requested.  If no module is requested,
+  the system wide MainController is instantiated after loading the system
+  wide controller.php file
+- check to see if this is an ajax call, and loads the header if not
+- set up the action for this request, default to 'index'
+- add the action's template ot the stack
+- call the action method off of the controller class
+- add on the footer if it's not ajax
+- call displayPage() on the controller which will call down to the View
+  object and send the data for the page along.
+
+Using Certis is pretty easy.  As a matter of fact, you might think you're
+doing something wrong, that's how easy it is.  Have a look at the hosts
+module if you don't believe me.  A small amount of code to do a decent
+amount of stuff.  And it's all reusable.
+
+If you have comments or suggestions, feel fee to email me at
+<certis@tulg.org>
+
+--
+The Uber

@@ -1,0 +1,9 @@
+TODO Items:
+
+- (FEATURE) commandline php scripting capabilities.
+- (FEATURE) Possibly look into Auth class stacking?  This would probably use an Auth Super class.
+- (FEATURE) Installation/Setup Wizard and module hooks for it.
+- better overall documentation
+
+
+-- index.php
