@@ -150,7 +150,7 @@
         */
         public function checkUID($uid, $create=false, $auth_mod=NULL, $initial_data=NULL){
    	
-			if($auth_mod==NULL){
+		if($auth_mod==NULL){
         		$auth_mod = self::$config->auth_class;
         	}
 
@@ -161,14 +161,15 @@
         		$data['fname'] = $initial_data['fname'];
         		$data['lname'] = $initial_data['lname'];
         	}
+            	API::DEBUG("[Prefs::checkUID()] " . print_r($data, true),1);
 
         	
         	$where_tmp = new WhereClause('uid', $uid);
-            $where_tmp->w_and('auth_mod', $auth_mod);
+            	$where_tmp->w_and('auth_mod', $auth_mod);
            
-            $this->where_clause($where_tmp);
+            	$this->where_clause($where_tmp);
         	$results = $this->getUsingWhere();
-            if(count($results) > 1) {
+            	if(count($results) > 1) {
             		API::DEBUG("[Prefs::checkUID()] Multiple results returned for '$uid' and '$auth_mod'.");
             		API::DEBUG("[Prefs::checkUID()] This is bad because I am using the first one.");
             

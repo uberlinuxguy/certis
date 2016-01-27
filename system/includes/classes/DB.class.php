@@ -79,7 +79,7 @@ class DB extends Certis{
     * @param    string  $params             array of the parameters passed in
     * @return   mixed
     */
-    protected function __call($funcname, $params = array()) {
+    public function __call($funcname, $params = array()) {
 
         if(property_exists($this, '_' . $funcname)){
         	//if(!is_object($params[0])){ 

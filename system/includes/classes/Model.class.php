@@ -113,7 +113,7 @@ class Model extends DB {
 	* @param	array 	$params				Array of parameters that were passed
 	* @return 	mixed
 	*/
-	protected function __call($funcname, $params = array()) {
+	public function __call($funcname, $params = array()) {
         parent::__call($funcname, $params);
 		$fields = join('|', array_keys($this->_metadata));
 		if (preg_match('/^getBy(' . $fields . ')$/i', $funcname, $match)) {
