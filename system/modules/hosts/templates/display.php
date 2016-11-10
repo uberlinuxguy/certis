@@ -12,7 +12,7 @@
   	
   	<!--  BEGIN HOSTS HOOKS -->
   	<div class="hostHookInfo">
-  		<? API::callHooks($view->module, $view->action, 'display', $view->getInfoValue('id'));?>
+  		<?php API::callHooks($view->module, $view->action, 'display', $view->getInfoValue('id'));?>
   	</div>
 	<!--  END HOSTS HOOKS -->
 	

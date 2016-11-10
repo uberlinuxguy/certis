@@ -14,9 +14,9 @@
 	<div id="LtBox" style="display: none;"><div id="btn_Close">x</div><div id="LB_Content"></div></div>
 	<div id="LB_Overlay" style="display: none;"></div>
     <div class="leftMenu">
-    	<? $HomeLinkClass= ($view->activeSection===FALSE) ? "leftNavLinkActive" : "leftNavLink";?>
+    	<?php $HomeLinkClass= ($view->activeSection===FALSE) ? "leftNavLinkActive" : "leftNavLink";?>
         <a class="<?=$HomeLinkClass?>" href="<?=$view->config->URL?>">Home</a>
-        <?
+        <?php
 		if(isset($GLOBALS['leftNav'])) {
 	        	if(is_array($GLOBALS['leftNav'])) {
         			ksort($GLOBALS['leftNav']);
@@ -33,7 +33,7 @@
     <div class="mainContent">
     <h1><?=$view->config->appname?></h1>
     <div id="errors">
-	<?
+	<?php
 		if(API::hasErrors()) {
 			foreach($_SESSION['error'] as $key => $error) {
 				print $error . "<br />\n";
@@ -43,7 +43,7 @@
 	?>
 	</div>
 	<div id="messages">
-	<?
+	<?php
 		if(API::hasMsgs()) {
 			foreach($_SESSION['msgs'] as $key => $u_msg) {
 				print $u_msg . "<br />\n";

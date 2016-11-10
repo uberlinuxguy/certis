@@ -1,4 +1,4 @@
-<?
+<?php
 class SessionDB extends Model {
 	protected $_table = 'sessions';
 	

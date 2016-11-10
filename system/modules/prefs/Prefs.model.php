@@ -1,4 +1,4 @@
-<?
+<?php
     class Prefs extends Model {
         protected $_table = 'prefs';
         

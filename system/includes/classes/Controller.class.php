@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * This is the base Controller class, implementing some
 * of the most basic shared functions across controllers

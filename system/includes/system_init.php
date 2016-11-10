@@ -15,7 +15,7 @@ require_once('../system/config/config.php');
 // XXX: Autoload needs to be here, and should really be the FIRST thing in this file.  
 // that or we can put it into another include to make init.php look nicer
 // set up the function to auto load classes
-function __autoload($class_name) {
+function classLoader($class_name) {
 	if(preg_match("/\.\./",$class_name)){
 		error_log("[System::__autoload] FATAL ERROR! SOMEONE TRIED TO ESCAPE! $class_name");
 		exit(1);
@@ -52,6 +52,10 @@ function __autoload($class_name) {
 			}
 		}
 	}
+}
+if(!spl_autoload_register('classLoader', true, true)){
+	error_log("[System::init()] Unable to register classLoader");
+	exit(1);
 }
 
 // create a new instance of the base Certis class.  

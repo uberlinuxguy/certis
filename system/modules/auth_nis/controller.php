@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * This is the class to instantiate an Auth_NISController object
 * for the Auth_NIS module.  Set the 'auth_class' variable in the

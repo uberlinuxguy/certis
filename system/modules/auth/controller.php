@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
 * This is the class to instantiate a AuthController object

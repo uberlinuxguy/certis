@@ -11,16 +11,16 @@
 	Permissions: <br /><br /> 
 	<select name="perms[]" multiple>
 
-<? foreach  ($data['perms'] as $perm) :?>
+<?php foreach  ($data['perms'] as $perm) :?>
 		
-		<? if($view->CertisInst->Perms->checkPerm($view->getInfoValue('uid'), $perm->name)) {
+		<?php if($view->CertisInst->Perms->checkPerm($view->getInfoValue('uid'), $perm->name)) {
 				$selected='SELECTED';
 			} else {
 				$selected="";
 			}
 		?>
 		<option value="<?=$perm->id?>" <?=$selected?>><?=$perm->descr?></option>
-<? endforeach;?>
+<?php endforeach;?>
 
 	</select>
 	

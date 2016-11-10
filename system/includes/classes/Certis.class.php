@@ -1,4 +1,4 @@
-<?
+<?php
 class Certis extends StdClass{
 	static $module; 
 	static $action;

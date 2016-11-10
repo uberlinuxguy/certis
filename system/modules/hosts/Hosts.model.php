@@ -1,4 +1,4 @@
-<?
+<?php
     class Hosts extends Model {
         protected $_table = 'hosts';
 

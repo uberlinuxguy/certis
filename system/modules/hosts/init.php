@@ -1,4 +1,4 @@
-<?
+<?php
 	// can't use globals stuff here, because it's init.php which happens out of order
 	// of other init.php's so declare and destroy our own version of the Perms object.
 	$tmp_perms = new Perms();

@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 	// add the logut menu if authed_user is set

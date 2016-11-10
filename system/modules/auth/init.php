@@ -1,4 +1,4 @@
-<?
+<?php
 
 	// permission to create internal users.
 	$this->Perms->registerPerm('auth_internal_admin', 'Internal User Managment');

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * This is the class to instantiate an Auth_LDAPController object
 * for the Auth_LDAP module.  Set the 'auth_class' variable in the

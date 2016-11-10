@@ -1,4 +1,4 @@
-<div class="page_line"><?
+<div class="page_line"><?php
 // if we have more items than fit on a page, let's print the page numbers.
 if($total_items > $items_per_page) {
 	$url = API::printURL($view->module, $view->action, $view->req_id);

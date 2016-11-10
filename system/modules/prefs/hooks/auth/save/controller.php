@@ -1,4 +1,4 @@
-<?
+<?php
 	//TODO: Check prefs permissions and maybe check that we are setting only our prefs unless admin
 	$prefs = new Prefs();
 	if(is_numeric($_POST['id'])) {

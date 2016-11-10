@@ -1,4 +1,4 @@
-<?
+<?php
 class UXSockComm extends Certis {
 
 	var $sockHandle = FALSE;

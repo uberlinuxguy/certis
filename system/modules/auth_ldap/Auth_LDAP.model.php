@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * Auth_LDAP - Class to instantiate an Auth_LDAP object.  Does 
  *            not extend Model because we don't need it to.
@@ -11,10 +11,11 @@ class Auth_LDAP extends Certis {
 		global $conf;
 		# Search for user
 		if($filter == ""){
-			$filter = "(&(objectClass=person)(" . $conf->auth_ldap->username_attr . "={search}))";
+			#$filter = "(&(objectClass=person)(" . $conf->auth_ldap->username_attr . "={search}))";
+			$filter = "(&" . $conf->auth_ldap->filter . "(" . $conf->auth_ldap->username_attr . "={search}))";
 		}
 		$filter = str_replace("{search}", $login, $filter);
-		error_log($filter);
+		#error_log($filter);
 		$search = ldap_search($this->ldap, $conf->auth_ldap->base, $filter);
 		error_log(print_r($search, true));
 		$errno = ldap_errno($this->ldap);
@@ -69,6 +70,7 @@ class Auth_LDAP extends Certis {
 			$errno = ldap_errno($this->ldap);
 			if ( $errno ) {
 				error_log("LDAP - Bind error $errno  (".ldap_error($this->ldap).")");
+				error_log("LDAP - Cannot bind with user " . $conf->auth_ldap->binddn  . " and " . $conf->auth_ldap->bindpw);
 				return false;
 			}
 		}

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * This is View class used to create the HTML sent back to the browser
 *

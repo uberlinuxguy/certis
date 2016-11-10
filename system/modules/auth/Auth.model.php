@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * This is the class to instantiate a Auth model object
 * for the Auth module.

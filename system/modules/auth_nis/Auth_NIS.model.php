@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * Auth_NIS - Class to instantiate an Auth_NIS object.  Does 
  *            not extend Model because we don't need it to.

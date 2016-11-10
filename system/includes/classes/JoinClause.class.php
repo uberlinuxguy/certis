@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * This is a  class for working with join clauses and the above DB class.
 *

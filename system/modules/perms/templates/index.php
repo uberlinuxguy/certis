@@ -3,9 +3,9 @@
 	Select a user to set perms for: 
 	<input type="submit" value="Go" style="float: right;" />
 	<select name='user'>
-<? foreach ($data['users'] as $user) :?>
+<?php foreach ($data['users'] as $user) :?>
 		<option value="<?=$user?>"><?=$user?></option>
-<? endforeach;?>
+<?php pendforeach;?>
 	</select> 
 
 	</form>
