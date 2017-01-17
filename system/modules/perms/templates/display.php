@@ -9,7 +9,7 @@
 	<input type="hidden" name="set_perms" value="1" />
 	<input type="hidden" name="uid" value="<?=$view->getInfoValue('uid')?>" />
 	Permissions: <br /><br /> 
-	<select name="perms[]" multiple>
+	<select name="perms[]" multiple style="float: none;">
 
 <?php foreach  ($data['perms'] as $perm) :?>
 		
@@ -25,5 +25,5 @@
 	</select>
 	
 	<br /><br />
-	<input type="submit" value="Save" />
+	<input type="submit" value="Save"  style="float: none;" />
 </form>

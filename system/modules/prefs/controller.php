@@ -21,6 +21,13 @@ class PrefsController extends DefaultController {
         $this->_model = new Prefs();
         $this->activeSection='prefs';
     }
+    public function secCheck() {
+  	if(!empty($this->authed_user)) {
+		return true;
+	}
+	return false;
+
+    }
     
     public function indexAction() {
     	

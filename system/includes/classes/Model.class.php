@@ -25,117 +25,146 @@ class Model extends DB {
 	/** Class to fetch results as */
 	protected $_fetchClass = null;
 
+	protected $_exTable = null;
+
 	/**
-	* Constructor.  When a instance of the class is loaded it will
-	* attempt to find the primary key of the table we are dealing with.
-	* If a value is passed to the constructor it will be looked up in
-	* the table against the primary key and if a row is found it will
-	* be assigned into the object.
-	*
-	* @access	public
-	* @param	mixed	$id					Id to lookup against primary key field
-	* @return	void
-	*/
-	public function __construct($id = null) {
-	    parent::__construct();
+	 * Constructor.  When a instance of the class is loaded it will
+	 * attempt to find the primary key of the table we are dealing with.
+	 * If a value is passed to the constructor it will be looked up in
+	 * the table against the primary key and if a row is found it will
+	 * be assigned into the object.
+	 *
+	 * @access	public
+	 * @param	mixed	$id					Id to lookup against primary key field
+	 * @return	void
+	 */
+	public function __construct($id = null, $conf= null ) {
+		parent::__construct();
 
 		if (!is_array($_ENV['describeTable'])) {
 			$_ENV['describeTable'] = array();
 		}
 
-		# Make sure we have a table to look at
+		if($conf != null) {
+			// we should be using different db config
+			// so run setup here.
+			$this->set_config($conf);
+			API::Debug("[Model::__construct] Using alternate config",1);
+		}
+
+		// Make sure we have a table to look at
 		if (is_null($this->_table)) {
 			throw new Exception('No table defined for access in model');
 		}
 
-		# Verify Model is not being use directly, and setup _fetchClass
+		// Verify Model is not being use directly, and setup _fetchClass
 		$class = get_class($this);
 		if ($class == 'Model') {
 			throw new Exception('Model should not be used directly');
 		}
-		
-		$this->_fetchClass = $class;
 
-		# Check to see if we've already checked table layout this request
-		if (array_key_exists($this->_table, $_ENV['describeTable'])) {
+		$this->_fetchClass = $class;
+		$this->scanTable();
+	}
+
+	public function scanTable(){
+
+		// Check to see if we've already checked table layout this request
+		if (array_key_exists($this->_table, $_ENV['describeTable']) &&
+			isset($_ENV['describeTable'][$this->_table]['key']) &&
+			isset($_ENV['describeTable'][$this->_table]['metadata'])) {
 			$this->_key = $_ENV['describeTable'][$this->_table]['key'];
 			$this->_metadata = $_ENV['describeTable'][$this->_table]['metadata'];
 		} else {
-			# Begin process of retrieving table layout
+			// Begin process of retrieving table layout
 			$sql = "DESCRIBE " . $this->_table;
 			$rows = $this->query($sql);
 
-			# If we got back our rows then parse out the data
+			// If we got back our rows then parse out the data
 			if (is_array($rows)) {
 				foreach ($rows as $row) {
-					# Format of Type field is "datatype(length) attributes" ex. int(11) unsigned
+					// Format of Type field is "datatype(length) attributes" ex. int(11) unsigned
 					preg_match('/^([a-z]+)\(([0-9]+)\)(.*)/i', $row->Type, $matches);
 					$this->_metadata[$row->Field] = new stdClass();
 					if(count($matches) > 0) {
-						
+
 						$this->_metadata[$row->Field]->type = trim($matches[1]);
 						$this->_metadata[$row->Field]->length = trim($matches[2]);
 						$this->_metadata[$row->Field]->attr = trim($matches[3]);
 						$this->_metadata[$row->Field]->extra = trim($row->Extra);
 					} else { 
-							$this->_metadata[$row->Field]->type = $row->Type;
+						$this->_metadata[$row->Field]->type = $row->Type;
 					}
-					# Check to see if the field we're dealing with is a primary key
+					// Check to see if the field we're dealing with is a primary key
 					if (preg_match('/\bPRI\b/', $row->Key)) {
+						error_log("Key found, " . $row->Field);
 						$this->_key = $row->Field;
 						$this->_metadata[$row->Field]->primary = true;
 					}
 				}
 			}
 			$_ENV['describeTable'][$this->_table] = array(
-				'key' => $this->_key,
-				'metadata' => $this->_metadata
-			);
+					'key' => $this->_key,
+					'metadata' => $this->_metadata
+					);
 		}
 
-		# If we know the primary key and have an id, fetch the row
+		// If we know the primary key and have an id, fetch the row
 		if (!empty($this->_key) and !is_null($id)) {
 			$row = $this->get($id);
 
-			
+
 
 		}
 	}
+	public function addTable($table){
+		$this->_exTable .= "," . $table;
+	}
+	public function clearExTable(){
+		$this->_exTable = "";
+	}
 
+	public function setKey($key){
+		$this->_key = $key;
+		$_ENV['describeTable'][$this->_table] = array(
+                                        'key' => $this->_key
+                                        );
+	}
 	/**
-	* Magic method for retrieval of rows by fields existing in the table.
-	*
-	* Parameters for getBy<field> methods:
-	*	string	criteria			What to match the field against
-	*
-	* @access	private
-	* @param	string	$funcname			Name of function that was called
-	* @param	array 	$params				Array of parameters that were passed
-	* @return 	mixed
-	*/
+	 * Magic method for retrieval of rows by fields existing in the table.
+	 *
+	 * Parameters for getBy<field> methods:
+	 *	string	criteria			What to match the field against
+	 *
+	 * @access	private
+	 * @param	string	$funcname			Name of function that was called
+	 * @param	array 	$params				Array of parameters that were passed
+	 * @return 	mixed
+	 */
 	public function __call($funcname, $params = array()) {
-        parent::__call($funcname, $params);
+		parent::__call($funcname, $params);
 		$fields = join('|', array_keys($this->_metadata));
 		if (preg_match('/^getBy(' . $fields . ')$/i', $funcname, $match)) {
 			$field = trim($match[1]);
 			$value = trim($params[0]);
 			$this->_where_clause = new WhereClause($field, $value);
 
-//			$this->setFetchClass($this->_fetchClass);
+			//			$this->setFetchClass($this->_fetchClass);
 			return $this->getWhere($this->_table);
 		}
 	}
 
 	/**
-	* Retrieve row from the table where the primary key matches the id given
-	*
-	* @access	public
-	* @param	mixed	$id				Id to match against primary key
-	* @return 	object
-	*/
+	 * Retrieve row from the table where the primary key matches the id given
+	 *
+	 * @access	public
+	 * @param	mixed	$id				Id to match against primary key
+	 * @return 	object
+	 */
 	public function get($id,$id_field=NULL) {
 		// used in case the caller wants to specify an ID field to use.
 		// for example if a table doesn't have a PRIMARY KEY.
+		error_log("Key Used, ".$this->_key);
 		if($id_field != NULL ) {
 			$this->_where_clause = new WhereClause($id_field, $id);
 		} else {
@@ -153,18 +182,20 @@ class Model extends DB {
 	}
 
 	/**
-	* Retrieve all rows from the table
-	*
-	* @access	public
-	* @return 	array
-	*/
-	public function getAll() {
+	 * Retrieve all rows from the table
+	 *
+	 * @access	public
+	 * @return 	array
+	 */
+	public function getAll($orderby=null) {
 		$this->where_clause(NULL);
-		$this->orderby(array($this->_key => "ASC"));
+		if($orderby!=null){
+			$this->orderby(array($orderby => "ASC"));	
+		} 
 		return $this->getWhere($this->_table);
 	}
 	public function getOneUsingWhere($just_count=FALSE) {
-		$result = $this->getWhere($this->_table,$just_count);
+		$result = $this->getWhere($this->_table . $this->_exTable,$just_count);
 		if(is_array($result)){
 			if(count($result)==0){
 				//file_put_contents("/tmp/debug_backtrace.txt", print_r(debug_backtrace(), true));
@@ -175,20 +206,20 @@ class Model extends DB {
 		return $result;
 	}
 	public function getUsingWhere() {
-		return $this->getWhere($this->_table);
+		return $this->getWhere($this->_table . $this->_exTable);
 	}
 
 	/**
-	* Retrieve a set of rows based on the "page" they would be on.
-	*
-	* @access	public
-	* @param	int		$page			Page number to retrieve items for
-	* @param	int		$items			Number of items per page
-	* @return 	array
-	*/
+	 * Retrieve a set of rows based on the "page" they would be on.
+	 *
+	 * @access	public
+	 * @param	int		$page			Page number to retrieve items for
+	 * @param	int		$items			Number of items per page
+	 * @return 	array
+	 */
 	public function getPage($page = 1, $items = 25) {
 		if(!is_numeric($page)) {
-				$page=1;
+			$page=1;
 		}
 		$this->limit($items);
 		API::DEBUG("[Model::getPage() page is $page, items is $items",7);
@@ -204,12 +235,12 @@ class Model extends DB {
 	}
 
 	/**
-	* Insert new row into the table
-	*
-	* @access	public
-	* @param	array 	$data			Array containing data to be inserted into the table
-	* @return 	bool
-	*/
+	 * Insert new row into the table
+	 *
+	 * @access	public
+	 * @param	array 	$data			Array containing data to be inserted into the table
+	 * @return 	bool
+	 */
 	public function insert($data) {
 		foreach ($data as $key => $val) {
 			if (!array_key_exists($key, $this->_metadata)) {
@@ -220,28 +251,28 @@ class Model extends DB {
 	}
 
 	/**
-	* Update row in the table
-	*
-	* @access	public
-	* @param	array 	$data			Array containing data to be inserted into the table
-	* @return 	bool
-	*/
+	 * Update row in the table
+	 *
+	 * @access	public
+	 * @param	array 	$data			Array containing data to be inserted into the table
+	 * @return 	bool
+	 */
 	public function update($data) {
 		foreach ($data as $key => $val) {
 			if (!array_key_exists($key, $this->_metadata)) {
 				unset($data[$key]);
 			}
 		}
-
+		API::DEBUG("[Model::update()] updating data, " . print_r($data,true),1);
 		return $this->updateRow($this->_table, $data);
 	}
 
 	/**
-	* Delete rows from the table
-	*
-	* @access	public
-	* @return 	bool
-	*/
+	 * Delete rows from the table
+	 *
+	 * @access	public
+	 * @return 	bool
+	 */
 	public function delete() {
 
 		$this->where_clause(new WhereClause($this->_key, $this->{$this->_key}));
@@ -249,21 +280,21 @@ class Model extends DB {
 	}
 
 	/**
-	* Delete all rows from the table
-	*
-	* @access	public
-	* @return	bool
-	*/
+	 * Delete all rows from the table
+	 *
+	 * @access	public
+	 * @return	bool
+	 */
 	public function deleteAll() {
 		return $this->deleteRow($this->_table, true);
 	}
 
 	/**
-	* Save the current row being worked with into back to the table
-	*
-	* @access	public
-	* @return 	bool
-	*/
+	 * Save the current row being worked with into back to the table
+	 *
+	 * @access	public
+	 * @return 	bool
+	 */
 	public function save() {
 		$data = array();
 		foreach ($this->_metadata as $key => $val) {

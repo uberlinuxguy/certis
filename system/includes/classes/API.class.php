@@ -16,7 +16,7 @@ class API extends Certis {
 	*/	
 	static public function DEBUG($message, $level=9) {
 		if(self::$CertisInst->config->debug >= $level) { 
-			error_log($message);
+			error_log("[Certis::Debug Level $level]" . $message);
 		}
 	}
 
@@ -40,8 +40,17 @@ class API extends Certis {
 				$auth_mod = new $classname;
 				if(isset(self::$CertisInst->authed_user)) {
 					if($auth_mod->validateUID(self::$CertisInst->authed_user)) {
-						$GLOBALS['leftNav'][$priority] = '<a class="' . $linkClass . '" href="' .
-							API::printUrl($module, $action) .  	'">' . $link_txt . '</a>';
+						$new_priority = $priority;
+						$direction=-1;
+						while(array_key_exists($new_priority, $GLOBALS['leftNav'])){
+							if($new_priority<=1){ 
+								$direction=1;
+								$new_priority=$priority;
+							}
+							$new_priority+=$direction;
+						}
+						$GLOBALS['leftNav'][$new_priority] = '<div class="' . $linkClass . '">' . '<a class="' . $linkClass . '" priority="' . $new_priority . '" href="' .
+							API::printUrl($module, $action) .  	'">' . $link_txt . '</a></div>';
 					} else {
 						API::DEBUG("[API::addMenuItem()] Unable to validate uid '" . self::$CertisInst->authed_user . "'");
 					}

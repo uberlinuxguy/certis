@@ -2,14 +2,30 @@ div {
 	clear: both;
 }
 div.leftMenu {
-    float: left;
-    display: block;
-    margin-right: 10px;
-    padding-right: 10px;
-    border-right: 1px solid black;
-    height: 768px;
+	float: left;
+	display: block;
+	margin-right: 10px;
+	padding-right: 10px;
+	border-right: 1px solid black;
+	height: 768px;
 	clear: none;
 }
+div#messages {
+	background: #7c7;
+	margin: 20px 20px 20px 0px;
+	border-radius: 10px;
+	padding: 10px;
+	display: flex;
+	align-items: center;
+}	
+div#errors {
+	background: #c77;
+	margin: 20px 20px 20px 0px;
+	border-radius: 10px;
+	padding: 10px;
+	display: flex;
+	align-items: center;
+}	
 #LB_Overlay {
 	background-image: url(/images/ovly.png);
 	background-color: transparent;
@@ -22,6 +38,7 @@ div.leftMenu {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/image/ovly.png",sizingMethod="scale");
 }
 #LtBox {
+	border-radius: 10px;
 	width: auto;
 	top: 175px;
 	left: 30%;
@@ -41,13 +58,13 @@ div.leftMenu {
 	position: absolute;
 	top: -1px;
 	color: #000;
-	right: -1px;
+	right: 5px;
 	cursor: pointer;
 	font-weight: bold;
-	border-top: 1px solid white;
+	/*border-top: 1px solid white;
 	border-left: 1px solid white;
 	border-bottom: 1px solid black;
-	border-right: 1px solid black;
+	border-right: 1px solid black;*/
 }
 a.leftNavLink, a.leftNavLinkActive {
 	display: block;
@@ -58,8 +75,8 @@ label {
 }
 
 input, textarea, select, div.frm_value {
-	float: right;
-	margin: 5px 5px 5px 5px;
+	float: none;
+	margin: 0px 5px 5px 5px;
 }
 
 input.formButton {
@@ -72,4 +89,17 @@ table {
 
 th,tr,td,table {
 	border: 1px solid black;
+}
+
+fieldset {
+	margin: 5px 5px 5px 5px;
+	padding: 5px 5px 5px 5px;
+}
+div.rowClass0{
+	background: #90bce2;
+	padding: 5px;
+}
+div.rowClass1{
+	background: #fff;
+	padding: 5px;
 }

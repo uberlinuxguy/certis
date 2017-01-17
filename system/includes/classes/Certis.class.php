@@ -157,6 +157,11 @@ class Certis extends StdClass{
 						}
 					}
 				}
+				// a few other checks
+				if($tmp_req_id == "" ) {
+					// see if it's in the request variables
+					$tmp_req_id = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : NULL;
+				}
 				// merge $_REQUEST into $tmp_params.
 				$tmp_params = array_merge($tmp_params, $_REQUEST);
 			} else { // end if for pretty URLS

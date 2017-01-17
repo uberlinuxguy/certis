@@ -1,0 +1,127 @@
+body {
+	font:13.3333px Arial;
+	background-color:#08477F;
+}
+#dbtable {
+	text-align:left;
+}
+#filters{
+height: 25vh;
+	//overflow:auto;
+position:fixed;
+top: 28px;
+left: 8px;
+width: auto;
+       background-color:white;
+       //border: 1px solid black;
+display:none;
+	box-shadow: 5px 5px 5px grey;	
+	padding-bottom: 21px;
+	padding-right: 9px;
+	border-radius:5px;
+
+}
+input::-webkit-input-placeholder {
+color: #696969;
+}
+
+input:-moz-placeholder { /* Firefox 18- */
+color: #696969;  
+      }
+
+input::-moz-placeholder {  /* Firefox 19+ */
+color: #696969;  
+}
+
+input:-ms-input-placeholder {  
+color: #696969;  
+      }
+#maintable{
+height: calc(100vh - 18px - 16px);
+overflow:auto;
+}
+td,th {
+border: 1px solid black;
+height: auto;
+//width: auto;
+}
+th {
+	background-color:#c8c8c8;
+font: 900 15.333px Arial, sans-serif;
+}
+table {
+	border-collapse: collapse;
+	border-top: 0px;
+}
+table tr:nth-child(even) td{
+	background-color:  #c8c8c8;
+}
+table tr:nth-child(odd) td{
+	background-color:  white;
+}
+
+/*
+.scrolltable {
+	overflow-x: scroll;
+height: 100%;
+display: flex;
+display: -webkit-flex;
+	 flex-direction: column;
+	 -webkit-flex-direction: column;
+}
+.scrolltable > .header {
+}
+*/
+/*
+.scrolltable > .body {
+noinspection CssInvalidPropertyValue
+width: -webkit-fit-content;
+       overflow-y: scroll;
+flex: 1;
+      -webkit-flex: 1;
+}
+*/
+th, td {
+min-width: 150px;
+max-width: 150px;
+}
+td input,td select {
+	background-color:inherit;
+/*	min-width:inherit; */
+	width: 100%;
+	max-width:inherit;
+}
+input[type="text"] {
+border:0;
+}
+input[type="submit"]:hover{
+color: #A4A4A4;
+}
+#right {
+float: right;
+}
+#left {
+float: left;
+}
+a:hover{
+color: #A4A4A4;
+  }
+a.leftNavLink,a.leftNavLinkActive {
+	padding: 0px 5px;
+	text-decoration:none;
+/*	border-color:buttonface;*/
+/*	border-style:outset;
+	border-width:2px;*/
+	/*color:black;*/
+	font:13.3333px Arial;
+    	/* background-color:buttonface;*/ 
+	/*-webkit-appearance:push-button;*/
+}
+span {
+color:#A4A4A4;
+}
+/*
+#maintable  tr td:nth-child(1) input, #maintable tr th:nth-child(1) input {
+    text-align: right;
+}
+*/

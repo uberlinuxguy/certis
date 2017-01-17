@@ -21,7 +21,12 @@ class Controller extends Certis {
     public function __construct() {
 
         $this->_view = new View;
-
+	if(method_exists($this, "secCheck")){
+		if(!$this->secCheck()){
+			API::Error("Error: You do not have access to this part of the site.");
+			API::Redirect("/");
+		}
+	}
 
     }
 

@@ -8,7 +8,7 @@ LtBox.init = function() {
 	jQuery('.lt_box').unbind();
 	
 	// override the click function with our function
-    jQuery('.lt_box').live("click", function() {
+    jQuery('body').on("click", ".lt_box", function() {
     	
     	new LtBox.hide();
     	
@@ -66,13 +66,13 @@ LtBox.show = function(width) {
 	});
 
 	// when a user clicks the x button or a cancel button, hide it too.
-	jQuery('#btn_Close,#btn_Cancel').live("click", function() {
+	jQuery('body').on("click", '#btn_Close,#btn_Cancel', function() {
 		new LtBox.hide();
 		return false;
 	});
 	
 	// if a user clicks cancel on a subForm, push then back by 1
-	jQuery('#btn_SubCancel').live("click", function () {
+	jQuery('body').on("click",'#btn_SubCancel', function () {
 		
 		
 		var url=jQuery('#referrer').attr('value');
@@ -93,12 +93,12 @@ LtBox.show = function(width) {
 		return false;
 	});
     
-	jQuery('#subForm').live("submit", function (){ 
+	jQuery('body').on("submit", '#subForm', function (){ 
 		return false;
 	});
 	
 	// stuff for a lightbox that posts to a URL within a lightbox.
-	jQuery('#btn_SubSave').live("click", function() {
+	jQuery('body').on("click", '#btn_SubSave', function() {
 		//TODO: ajax post the form and get the output
 		// request to get the HTML data into the content of the LB
 		var url=jQuery('#subForm').attr('action');

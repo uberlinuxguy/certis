@@ -18,10 +18,13 @@ class PermsController extends DefaultController {
     }
 
 	public function indexAction() {
+		$this->addModuleTemplate($this->module, 'index');
+	}
+	public function selectUserAction() {
 		$auth_class_name = self::$config->auth_class;
 		$auth = new $auth_class_name;
 		$this->_view->data['users'] = $auth->listUsers();
-		$this->addModuleTemplate($this->module, 'index');
+		$this->addModuleTemplate($this->module, 'selectUser');
 	}
 	
 	public function displayAction() {

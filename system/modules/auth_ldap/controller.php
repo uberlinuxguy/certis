@@ -52,6 +52,8 @@ class Auth_LDAPController extends Controller {
 
 	public function logoutAction() {
 		session_destroy();
+		session_start();
+		API::Message("You have been logged out.");	
 		API::Redirect("/");
 	}
 

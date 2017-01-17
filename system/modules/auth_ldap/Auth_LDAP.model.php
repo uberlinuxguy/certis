@@ -192,7 +192,7 @@ class Auth_LDAP extends Certis {
 			
 			# limit the attributes we are going to look for.
 			$filter="(objectClass=person)";
-			$attrs_filter = array($conf->auth_ldap->username_attr);
+			$attrs_filter = array($conf->auth_ldap->username_attr, $conf->auth_ldap->uid_attr);
 			$search = ldap_search($this->ldap, $conf->auth_ldap->base, $filter, $attrs_filter);
 			$errno = ldap_errno($this->ldap);
 			if ( $errno ) {
@@ -204,10 +204,26 @@ class Auth_LDAP extends Certis {
 					error_log("LDAP - Search for users failed.");
 					return false;
 				} else {
+					echo "<!--\n";
+					echo $conf->auth_ldap->uid_attr . "\n";
+					echo $conf->auth_ldap->username_attr . "\n";
 					for($i=0; $i<$users['count']; $i++){
-						array_push($user_array, $users[$i][$conf->auth_ldap->username_attr][0]);
+						$tmpArray = array();
+						#print_r($users[$i]);
+						$uid=$users[$i][strtolower($conf->auth_ldap->uid_attr)][0];
+						$uname=$users[$i][$conf->auth_ldap->username_attr][0];
+						if(array_key_exists($uid)){
+							API::Debug("listUsers(): Error. Duplicate UID dropped!!!! $uid", 0);
+						} else {
+							$user_array[$uid]=$uname;
+						}
+						#echo "[$uid] => $uname\n";
+						#$tmpArray[$uid]=$uname;
+						#$user_array[]=$tmpArray;
+						#array_push($user_array, $users[$i][$conf->auth_ldap->username_attr][0]);
 					}
-					sort($user_array);
+					echo "-->\n\n";
+					asort($user_array);
 					return $user_array;
 				}
 			}
